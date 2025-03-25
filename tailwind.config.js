@@ -29,6 +29,7 @@ module.exports = {
         200: "#666876",
         300: "#191D31",
       },
+      white: "#FFFFFF",
       danger: "#F75555",
     },
   },

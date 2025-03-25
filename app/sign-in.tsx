@@ -6,13 +6,31 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import images from "@/constants/images";
 import icons from "@/constants/icons";
+import { login } from "@/lib/appwrite";
+import { useGlobalContext } from "@/lib/global-provider";
+import { Redirect } from "expo-router";
+
 const SignIn = () => {
-  const handleLogin = () => {
-    console.log("Login");
+  const { isLoggedIn, loading, refetch } = useGlobalContext();
+
+  if (!loading && isLoggedIn) {
+    return <Redirect href="/" />;
+  }
+
+  const handleLogin = async () => {
+    const result = await login();
+
+    if (result) {
+      refetch();
+    } else {
+      Alert.alert("Login failed", "Please try again");
+    }
   };
+
   return (
     <SafeAreaView className="bg-white h-full">
       <ScrollView contentContainerClassName="h-full">
@@ -33,8 +51,8 @@ const SignIn = () => {
             Login to ReState with Google
           </Text>
           <TouchableOpacity
-            className="bg-white shadow-md shadow-zinc-100 rounded-full w-full"
             onPress={handleLogin}
+            className="bg-white shadow-md shadow-zinc-300 rounded-full w-full py-4 mt-5"
           >
             <View className="flex flex-row items-center justify-center">
               <Image
